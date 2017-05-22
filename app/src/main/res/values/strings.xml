@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Short Process</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="processes_create_new"></string>
+    <string name="process_title">Process name</string>
 </resources>

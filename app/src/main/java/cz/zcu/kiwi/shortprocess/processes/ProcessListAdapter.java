@@ -1,9 +1,10 @@
-package cz.zcu.kiwi.shortprocess;
+package cz.zcu.kiwi.shortprocess.processes;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.util.Date;
 
+import cz.zcu.kiwi.shortprocess.R;
+import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 
 
@@ -54,5 +57,13 @@ public class ProcessListAdapter extends ArrayAdapter<Process> {
         image_icon.setImageResource(R.mipmap.ic_launcher);
 
         return rowView;
+    }
+
+    public void setItems(ModelCursor<Process> items) {
+        Log.v("ProcessListAdapter", "Displaying " + items.getCount() + " processes");
+
+        while (items.moveToNext()) {
+            this.add(items.formatCurrent());
+        }
     }
 }

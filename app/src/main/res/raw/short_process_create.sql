@@ -12,9 +12,9 @@ CREATE TABLE `sp__process` (
 	`name`	TEXT NOT NULL,
 	`description`	TEXT
 );
-CREATE TABLE `sp__note` (
+CREATE TABLE "sp__note" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`processs_id`	INTEGER,
+	`process_id`	INTEGER,
 	`process_step_id`	INTEGER,
 	`execution_id`	INTEGER,
 	`attached_file`	TEXT,

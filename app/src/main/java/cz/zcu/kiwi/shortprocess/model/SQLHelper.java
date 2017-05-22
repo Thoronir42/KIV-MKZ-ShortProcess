@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Scanner;
+
+import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.model.service.ProcessSteps;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
 
@@ -16,21 +19,30 @@ public class SQLHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "kiwi_short_process.db";
     private static final int DATABASE_VERSION = 1;
 
+    private Context context;
+
     private Processes processes;
     private ProcessSteps processSteps;
 
     public SQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        throw new UnsupportedOperationException();
-        /*
-        String sql = "loaded file";
-        Log.d("EventsData", "onCreate: " + sql);
-        db.execSQL(sql);
-        */
+        Log.i("SQLHelper", "Creating DB");
+
+        Scanner s = new Scanner(context.getResources().openRawResource(R.raw.short_process_create))
+                .useDelimiter(";");
+        while(s.hasNext()) {
+            String query = s.next().trim();
+            if(query.length() > 0) {
+                Log.i("SQLHelper", "Query: " + query);
+                db.execSQL(query);
+            }
+
+        }
     }
 
     @Override

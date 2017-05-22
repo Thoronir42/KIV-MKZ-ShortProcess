@@ -2,7 +2,7 @@ package cz.zcu.kiwi.shortprocess.model.entity;
 
 import java.util.Date;
 
-public class Process {
+public class Process extends BaseEntity {
     private String title;
     private String description;
 

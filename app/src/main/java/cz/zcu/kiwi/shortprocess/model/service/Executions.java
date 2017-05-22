@@ -1,5 +1,6 @@
 package cz.zcu.kiwi.shortprocess.model.service;
 
+import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 
 public class Executions extends BaseModelHelper {
@@ -11,5 +12,15 @@ public class Executions extends BaseModelHelper {
 
     Executions(SQLHelper sql) {
         super(sql);
+    }
+
+    @Override
+    protected String getTable() {
+        return TABLE;
+    }
+
+    @Override
+    protected ModelCursor.Parser getEntityParser() {
+        throw new UnsupportedOperationException();
     }
 }

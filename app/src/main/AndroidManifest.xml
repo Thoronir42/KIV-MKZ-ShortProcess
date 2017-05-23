@@ -9,15 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".processes.ProcessListActivity">
+        <activity android:name=".activities.processes.ProcessListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".processes.EditProcessActivity"
-            android:parentActivityName=".processes.ProcessListActivity">
+        <activity android:name=".activities.processes.EditProcessActivity"
+            android:parentActivityName=".activities.processes.ProcessListActivity">
 
         </activity>
     </application>

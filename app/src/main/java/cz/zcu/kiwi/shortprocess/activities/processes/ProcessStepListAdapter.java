@@ -1,4 +1,4 @@
-package cz.zcu.kiwi.shortprocess.processes;
+package cz.zcu.kiwi.shortprocess.activities.processes;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -12,26 +12,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
+import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
 
 
-public class ProcessListAdapter extends ArrayAdapter<Process> {
-
-    private final LayoutInflater inflater;
-
-    private final DateFormat dateFormat;
-
-    public ProcessListAdapter(@NonNull Context context, @LayoutRes int resource) {
+public class ProcessStepListAdapter extends ArrayAdapter<ProcessStep> {
+    public ProcessStepListAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
-
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        dateFormat =  android.text.format.DateFormat.getDateFormat(getContext());
-
     }
 
     @NonNull
@@ -44,22 +35,20 @@ public class ProcessListAdapter extends ArrayAdapter<Process> {
         View rowView = convertView != null ? convertView : inflater.inflate(R.layout.process_list_item, parent, false);
 
         TextView text_title = (TextView) rowView.findViewById(R.id.title);
-        TextView text_subtitle = (TextView) rowView.findViewById(R.id.subtitle);
         ImageView image_icon = (ImageView) rowView.findViewById(R.id.icon);
 
-        Process p = getItem(position);
+        ProcessStep ps = getItem(position);
 
-        text_title.setText(p.getTitle());
-
-        Date date = p.getDate_created();
-        text_subtitle.setText(date != null ? dateFormat.format(date) : "");
+        text_title.setText(ps.getCaption());
 
         image_icon.setImageResource(R.mipmap.ic_launcher);
 
         return rowView;
     }
 
-    public void setItems(ModelCursor<Process> items) {
+    public void setItems(ModelCursor<ProcessStep> items) {
+        this.clear();
+
         Log.v("ProcessListAdapter", "Displaying " + items.getCount() + " processes");
 
         while (items.moveToNext()) {

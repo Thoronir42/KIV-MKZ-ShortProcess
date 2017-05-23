@@ -22,6 +22,16 @@ public class ProcessSteps extends BaseModelHelper {
         super(sql);
     }
 
+    public ModelCursor<ProcessStep> findStepsOfProcess(int process_id) {
+        SQLiteDatabase db = sql.getReadableDatabase();
+        String where = PROCESS_ID + " = ?";
+        String[] whereValues = new String[]{"" + process_id};
+        Cursor cursor = db.query(getTable(), null, where, whereValues, null,
+                null, null);
+
+        return new ModelCursor<>(cursor, getEntityParser());
+    }
+
     @Override
     protected String getTable() {
         return TABLE;

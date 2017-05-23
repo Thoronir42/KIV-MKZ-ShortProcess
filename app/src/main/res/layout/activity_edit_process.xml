@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cz.zcu.kiwi.shortprocess.processes.EditProcessActivity">
+    tools:context=".activities.processes.EditProcessActivity">
 
     <TextView
+        android:id="@+id/label_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/process_title" />
@@ -17,7 +18,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:text="Karel" />
+        android:hint="@string/process_title_ex" />
+
+    <TextView
+        android:id="@+id/label_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/process_description" />
+
+    <EditText
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine"
+        android:hint="@string/process_description_ex" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/process_steps" />
 
     <ListView
         android:id="@+id/process_steps"

@@ -2,6 +2,12 @@
     <string name="app_name">Short Process</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name="processes_create_new"></string>
-    <string name="process_title">Process name</string>
+    <string name="processes_create_new">Create new process</string>
+    <string name="process_title">Process title</string>
+    <string name="processes">Processes</string>
+    <string name="process_executions_short">Executions</string>
+    <string name="process_steps">Process steps</string>
+    <string name="process_description">Process description</string>
+    <string name="process_title_ex">Rose candle</string>
+    <string name="process_description_ex">Lovely smelling candles for any occasion</string>
 </resources>

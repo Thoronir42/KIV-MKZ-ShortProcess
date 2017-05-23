@@ -8,9 +8,9 @@ CREATE TABLE "sp__process_step" (
 );
 CREATE TABLE "sp__process" (
 	`_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`date_created`	TEXT NOT NULL,
+	`date_created`	INTEGER NOT NULL,
 	`title`	TEXT NOT NULL,
-	`description`	TEXT
+	`description`	TEXT NOT NULL DEFAULT ''
 );
 CREATE TABLE "sp__note" (
 	`_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -24,7 +24,7 @@ CREATE TABLE "sp__execution_step" (
 	`_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`execution_id`	INTEGER NOT NULL,
 	`process_step_id`	INTEGER NOT NULL,
-	`notified_on`	TEXT,
+	`notified_on`	INTEGER,
 	`status`	INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE "sp__execution" (

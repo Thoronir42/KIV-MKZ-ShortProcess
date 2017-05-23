@@ -1,6 +1,8 @@
 package cz.zcu.kiwi.shortprocess.model.entity;
 
 
+import android.support.annotation.NonNull;
+
 public class ProcessStep extends BaseEntity {
     private int process_id;
     private int interval_after_start;
@@ -11,7 +13,7 @@ public class ProcessStep extends BaseEntity {
         this.process_id = process_id;
     }
 
-    public int getProcess_id() {
+    public int getProcessId() {
         return process_id;
     }
 
@@ -19,20 +21,21 @@ public class ProcessStep extends BaseEntity {
         this.process_id = process_id;
     }*/
 
-    public int getInterval_after_start() {
+    public int getIntervalAfterStart() {
         return interval_after_start;
     }
 
-    public void setInterval_after_start(int interval_after_start) {
+    public void setIntervalAfterStart(int interval_after_start) {
         this.interval_after_start = interval_after_start;
     }
 
+    @NonNull
     public String getCaption() {
         return caption;
     }
 
     public void setCaption(String caption) {
-        this.caption = caption;
+        this.caption = caption != null ? caption : "";
     }
 
     public String getDescription() {

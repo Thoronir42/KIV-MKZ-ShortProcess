@@ -1,7 +1,9 @@
 package cz.zcu.kiwi.shortprocess.model.service;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
+import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
@@ -34,7 +36,7 @@ public class ProcessSteps extends BaseModelHelper {
         return parser;
     }
 
-    private static class ProcessStepParser extends ModelCursor.Parser {
+    private static class ProcessStepParser extends EntityParser<ProcessStep> {
 
         @Override
         public ProcessStep parse(Cursor c) {
@@ -42,7 +44,8 @@ public class ProcessSteps extends BaseModelHelper {
 
             ProcessStep ps = new ProcessStep(processId);
 
-            ps.setInterval_after_start(c.getInt(c.getColumnIndex(INTERVAL_AFTER_START)));
+            ps.setId(c.getInt(c.getColumnIndex(ID)));
+            ps.setIntervalAfterStart(c.getInt(c.getColumnIndex(INTERVAL_AFTER_START)));
             ps.setCaption(c.getString(c.getColumnIndex(CAPTION)));
             ps.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
 

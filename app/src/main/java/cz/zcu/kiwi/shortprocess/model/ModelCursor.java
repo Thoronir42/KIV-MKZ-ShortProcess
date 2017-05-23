@@ -5,18 +5,15 @@ import android.database.CursorWrapper;
 
 public class ModelCursor<E> extends CursorWrapper {
 
-    private Parser parser;
+    private EntityParser<E> parser;
 
-    public ModelCursor(Cursor cursor, Parser parser) {
+    public ModelCursor(Cursor cursor, EntityParser<E> parser) {
         super(cursor);
         this.parser = parser;
     }
 
     public E formatCurrent() {
-        return (E)parser.parse(this);
+        return parser.parse(this);
     }
 
-    public static abstract class Parser {
-        public abstract Object parse(Cursor c);
-    }
 }

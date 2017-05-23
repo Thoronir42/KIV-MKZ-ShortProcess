@@ -3,11 +3,11 @@ package cz.zcu.kiwi.shortprocess.model.service;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
-import java.text.ParsePosition;
 import java.util.Date;
 
-import cz.zcu.kiwi.shortprocess.model.ModelCursor;
+import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 
@@ -24,12 +24,17 @@ public class Processes extends BaseModelHelper<Process> {
         super(sql);
     }
 
-    public void create(String title) {
+    public void create(String title, String description) {
         SQLiteDatabase db = this.sql.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DATE_CREATED, System.currentTimeMillis());
+        long currentMillis = System.currentTimeMillis();
+
+        values.put(DATE_CREATED, currentMillis);
         values.put(TITLE, title);
+        values.put(DESCRIPTION, description);
+
         db.insert(TABLE, null, values);
+        Log.i("Processes", String.format("Created process %s with date %d", title, currentMillis));
     }
 
 
@@ -47,16 +52,13 @@ public class Processes extends BaseModelHelper<Process> {
         return parser;
     }
 
-    private static class ProcessParser extends ModelCursor.Parser {
+    private static class ProcessParser extends EntityParser<Process> {
 
         @Override
         public Process parse(Cursor c) {
             String title = c.getString(c.getColumnIndex(TITLE));
 
-            String dateString = c.getString(c.getColumnIndex(DATE_CREATED));
-            Date date = DATE_FORMAT.parse(dateString, new ParsePosition(0));
-
-            Process p = new Process(title, date);
+            Process p = new Process(title, new Date(c.getLong(c.getColumnIndex(DATE_CREATED))));
             p.setId(c.getInt(c.getColumnIndex(ID)));
             p.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
 

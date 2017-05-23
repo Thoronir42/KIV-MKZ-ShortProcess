@@ -1,7 +1,8 @@
 package cz.zcu.kiwi.shortprocess.model.service;
 
-import cz.zcu.kiwi.shortprocess.model.ModelCursor;
+import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.entity.Execution;
 
 public class Executions extends BaseModelHelper {
     public static final String TABLE = "sp__execution";
@@ -20,7 +21,7 @@ public class Executions extends BaseModelHelper {
     }
 
     @Override
-    protected ModelCursor.Parser getEntityParser() {
+    protected EntityParser<Execution> getEntityParser() {
         throw new UnsupportedOperationException();
     }
 }

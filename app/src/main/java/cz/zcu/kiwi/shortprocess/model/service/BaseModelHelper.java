@@ -5,15 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.text.SimpleDateFormat;
 
+import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.BaseEntity;
-import cz.zcu.kiwi.shortprocess.model.entity.Process;
 
 abstract class BaseModelHelper<Type extends BaseEntity> {
     public static final String ID = "_id";
-
-    protected static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat();
 
     protected final SQLHelper sql;
 
@@ -23,15 +21,15 @@ abstract class BaseModelHelper<Type extends BaseEntity> {
 
     public Type find(int id) {
         SQLiteDatabase db = sql.getReadableDatabase();
-        String where = ID +" = ?";
+        String where = ID + " = ?";
         String[] whereValues = new String[]{"" + id};
         Cursor cursor = db.query(getTable(), null, where, whereValues, null,
                 null, null);
-        if(!cursor.moveToNext()) {
+        if (!cursor.moveToNext()) {
             return null;
         }
 
-        return (Type)getEntityParser().parse(cursor);
+        return getEntityParser().parse(cursor);
     }
 
     public ModelCursor<Type> findAll() {
@@ -44,5 +42,6 @@ abstract class BaseModelHelper<Type extends BaseEntity> {
     }
 
     protected abstract String getTable();
-    protected abstract ModelCursor.Parser getEntityParser();
+
+    protected abstract EntityParser<Type> getEntityParser();
 }

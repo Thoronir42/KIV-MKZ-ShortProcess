@@ -34,8 +34,6 @@ public class ProcessListActivity extends AppCompatActivity {
         this.sql = new SQLHelper(this);
         Processes processes = this.sql.getProcesses();
 
-        processes.create("Process #" + (new Random()).nextInt(100), "");
-
         processAdapter = new ProcessListAdapter(this, R.layout.process_list_item);
         processList = prepareProcessList(processAdapter);
 
@@ -58,6 +56,7 @@ public class ProcessListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, EditProcessActivity.class);
+                intent.setAction(EditProcessActivity.ACTION_CREATE);
                 startActivity(intent);
             }
         });
@@ -75,6 +74,7 @@ public class ProcessListActivity extends AppCompatActivity {
                 Process process = (Process) parent.getItemAtPosition(position);
 
                 Intent intent = new Intent(context, EditProcessActivity.class);
+                intent.setAction(EditProcessActivity.ACTION_EDIT);
 
                 intent.putExtra(Processes.ID, process.getId());
 

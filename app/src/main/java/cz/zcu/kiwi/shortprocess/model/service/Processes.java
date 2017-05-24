@@ -24,19 +24,6 @@ public class Processes extends BaseModelHelper<Process> {
         super(sql);
     }
 
-    public void create(String title, String description) {
-        SQLiteDatabase db = this.sql.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        long currentMillis = System.currentTimeMillis();
-
-        values.put(DATE_CREATED, currentMillis);
-        values.put(TITLE, title);
-        values.put(DESCRIPTION, description);
-
-        db.insert(TABLE, null, values);
-        Log.i("Processes", String.format("Created process %s with date %d", title, currentMillis));
-    }
-
 
     @Override
     protected String getTable() {
@@ -63,6 +50,16 @@ public class Processes extends BaseModelHelper<Process> {
             p.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
 
             return p;
+        }
+
+        public ContentValues parse(Process p) {
+            ContentValues values = new ContentValues();
+
+            // values.put(DATE_CREATED, p.getDate_created().getTime()); date created should not be updated
+            values.put(TITLE, p.getTitle());
+            values.put(DESCRIPTION, p.getDescription());
+
+            return values;
         }
     }
 

@@ -10,4 +10,10 @@
     <string name="process_description">Process description</string>
     <string name="process_title_ex">Rose candle</string>
     <string name="process_description_ex">Lovely smelling candles for any occasion</string>
+    <string name="save_process">Save process</string>
+    <string name="process_created">Process created</string>
+    <string name="process_updated">Process changes saved</string>
+    <string name="process_delete">Delete process</string>
+    <string name="delete_failed">Delete failed</string>
+    <string name="process_deleted">Process deleted</string>
 </resources>

@@ -11,6 +11,9 @@ public class Process extends BaseEntity {
     private int total_executions;
     private int running_executions;
 
+    public Process(String title, long milliseconds) {
+        this(title, new Date(milliseconds));
+    }
     public Process(String title, Date date_created) {
         this(title, date_created, 0, 0);
     }

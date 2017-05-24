@@ -1,5 +1,6 @@
 package cz.zcu.kiwi.shortprocess.model.service;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -60,6 +61,18 @@ public class ProcessSteps extends BaseModelHelper {
             ps.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
 
             return ps;
+        }
+
+        @Override
+        public ContentValues parse(ProcessStep entity) {
+            ContentValues values = new ContentValues();
+
+            values.put(PROCESS_ID, entity.getProcessId());
+            values.put(INTERVAL_AFTER_START, entity.getIntervalAfterStart());
+            values.put(CAPTION, entity.getCaption());
+            values.put(DESCRIPTION, entity.getDescription());
+
+            return values;
         }
     }
 }

@@ -2,6 +2,9 @@
     <string name="app_name">Short Process</string>
     <string name="title_activity_main">MainActivity</string>
 
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+
     <string name="processes_create_new">Create new process</string>
     <string name="process_title">Process title</string>
     <string name="processes">Processes</string>
@@ -16,4 +19,12 @@
     <string name="process_delete">Delete process</string>
     <string name="delete_failed">Delete failed</string>
     <string name="process_deleted">Process deleted</string>
+    <string name="process_step_add">Add step</string>
+    <string name="process_step_title">Step title</string>
+    <string name="process_step_description">Process step description</string>
+    <string name="step_alert_delay">Step delay from start</string>
+    <string name="process_step_created">Step created</string>
+    <string name="create_error">Creation failed</string>
+    <string name="save_error">Error occured during saving</string>
+
 </resources>

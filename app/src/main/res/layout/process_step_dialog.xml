@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/textCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/process_step_title"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/textDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textCaption"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/process_step_description" />
+
+    <TextView
+        android:id="@+id/label_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textDescription"
+        android:text="@string/step_alert_delay" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@id/label_interval"
+        android:layout_centerHorizontal="true">
+
+        <cz.zcu.kiwi.widgetWrappers.NumberPickerMinMax
+            android:id="@+id/numberDays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            min="0" max="7"/>
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="wrap_content" />
+
+        <cz.zcu.kiwi.widgetWrappers.NumberPickerMinMax
+            android:id="@+id/numberHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            min="0" max="23"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text=":" />
+        <cz.zcu.kiwi.widgetWrappers.NumberPickerMinMax
+            android:id="@+id/numberMinutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            min="0" max="60"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":" />
+        <cz.zcu.kiwi.widgetWrappers.NumberPickerMinMax
+            android:id="@+id/numberSeconds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            min="0" max="60"/>
+    </LinearLayout>
+
+</RelativeLayout>

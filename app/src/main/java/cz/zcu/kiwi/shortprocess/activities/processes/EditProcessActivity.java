@@ -1,11 +1,15 @@
 package cz.zcu.kiwi.shortprocess.activities.processes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -13,8 +17,11 @@ import android.widget.Toast;
 import java.text.DateFormat;
 
 import cz.zcu.kiwi.shortprocess.R;
+import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
+import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
+import cz.zcu.kiwi.shortprocess.model.service.ProcessSteps;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
 
 
@@ -31,6 +38,7 @@ public class EditProcessActivity extends AppCompatActivity {
     private EditText textTitle;
     private EditText textDescription;
     private ListView listProcessSteps;
+    private Button buttonAddStep;
 
     private ProcessStepListAdapter processSteps;
 
@@ -48,6 +56,14 @@ public class EditProcessActivity extends AppCompatActivity {
 
         this.processSteps = new ProcessStepListAdapter(this, R.layout.process_step_list_item);
         this.listProcessSteps.setAdapter(this.processSteps);
+
+        buttonAddStep = (Button) findViewById(R.id.button_add_step);
+        buttonAddStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNewStepDialog();
+            }
+        });
 
         this.init(getIntent());
     }
@@ -100,8 +116,14 @@ public class EditProcessActivity extends AppCompatActivity {
             this.textTitle.setText(process.getTitle());
             this.textDescription.setText(process.getDescription());
             this.loadSteps();
-        }
 
+            this.buttonAddStep.setVisibility(View.VISIBLE);
+        } else {
+            this.buttonAddStep.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void loadSteps() {
         this.processSteps.setItems(this.db.getProcessSteps().findStepsOfProcess(process.getId()));
     }
 
@@ -118,6 +140,10 @@ public class EditProcessActivity extends AppCompatActivity {
             if (processes.insert(p) != -1) {
                 Toast.makeText(this, R.string.process_created, Toast.LENGTH_LONG)
                         .show();
+                setProcess(p);
+            } else {
+                Toast.makeText(this, R.string.save_error, Toast.LENGTH_LONG)
+                        .show();
             }
 
         } else {
@@ -125,6 +151,9 @@ public class EditProcessActivity extends AppCompatActivity {
             this.process.setDescription(description);
             if (processes.update(this.process) > 0) {
                 Toast.makeText(this, R.string.process_updated, Toast.LENGTH_LONG)
+                        .show();
+            } else {
+                Toast.makeText(this, R.string.save_error, Toast.LENGTH_LONG)
                         .show();
             }
         }
@@ -147,5 +176,27 @@ public class EditProcessActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProcessListActivity.class);
         startActivity(intent);
         return true;
+    }
+
+    private void showNewStepDialog() {
+        final ProcessStepDialog processStepDialog = new ProcessStepDialog();
+        processStepDialog.setOnSave(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Bundle b = processStepDialog.getStepArgs();
+
+                ProcessStep step = new ProcessStep(EditProcessActivity.this.process.getId());
+                step.setCaption(b.getString(ProcessSteps.CAPTION));
+                step.setDescription(b.getString(ProcessSteps.DESCRIPTION));
+                step.setIntervalAfterStart(b.getLong(ProcessSteps.INTERVAL_AFTER_START));
+
+                if (db.getProcessSteps().insert(step) > 0) {
+                    Toast.makeText(EditProcessActivity.this, R.string.process_step_created, Toast.LENGTH_LONG);
+                }
+                ;
+                loadSteps();
+            }
+        });
+        processStepDialog.show(this.getSupportFragmentManager(), "newStepDialog");
     }
 }

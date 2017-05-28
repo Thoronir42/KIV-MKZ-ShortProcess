@@ -9,20 +9,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Date;
-
 import cz.zcu.kiwi.shortprocess.R;
+import cz.zcu.kiwi.shortprocess.model.Interval;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
-import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
 
 
 public class ProcessStepListAdapter extends ArrayAdapter<ProcessStep> {
+
+    private ProcessStepClickListener onDelete;
+    private ProcessStepClickListener onClick;
+
     public ProcessStepListAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
+    }
+
+    public void setOnDelete(ProcessStepClickListener onDelete) {
+        this.onDelete = onDelete;
+    }
+
+    public void setOnClick(ProcessStepClickListener onClick) {
+        this.onClick = onClick;
     }
 
     @NonNull
@@ -32,16 +42,40 @@ public class ProcessStepListAdapter extends ArrayAdapter<ProcessStep> {
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = convertView != null ? convertView : inflater.inflate(R.layout.process_list_item, parent, false);
+        View rowView = convertView != null ? convertView : inflater.inflate(R.layout.process_step_list_item, parent, false);
 
-        TextView text_title = (TextView) rowView.findViewById(R.id.title);
-        ImageView image_icon = (ImageView) rowView.findViewById(R.id.icon);
+        TextView textCaption = (TextView) rowView.findViewById(R.id.stepListItem_caption);
+        TextView textDelay = (TextView) rowView.findViewById(R.id.stepListItem_delay);
+        Button buttonDelete = (Button) rowView.findViewById(R.id.stepListItem_buttonDelete);
 
-        ProcessStep ps = getItem(position);
+        final ProcessStep ps = getItem(position);
+        if (ps == null) {
+            Log.e("ProcessStepListAdapter", "Process step not found");
+            return rowView;
+        }
 
-        text_title.setText(ps.getCaption());
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClick.onClick(ps.getId());
+            }
+        });
 
-        image_icon.setImageResource(R.mipmap.ic_launcher);
+        textCaption.setText(ps.getCaption());
+        textDelay.setText(new Interval(ps.getIntervalAfterStart()).toString());
+
+        if (onDelete != null) {
+            buttonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    onDelete.onClick(ps.getId());
+                }
+            });
+            buttonDelete.setVisibility(View.VISIBLE);
+        } else {
+            buttonDelete.setVisibility(View.INVISIBLE);
+        }
 
         return rowView;
     }
@@ -53,6 +87,16 @@ public class ProcessStepListAdapter extends ArrayAdapter<ProcessStep> {
 
         while (items.moveToNext()) {
             this.add(items.formatCurrent());
+        }
+    }
+
+    public static abstract class ProcessStepClickListener {
+        void onClick(long processStepId) {
+
+        }
+
+        void onLongClick(long processStepId) {
+
         }
     }
 }

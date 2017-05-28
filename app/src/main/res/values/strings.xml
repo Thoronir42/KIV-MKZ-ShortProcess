@@ -33,5 +33,7 @@
     <string name="process_step_created">Step created</string>
     <string name="confirm_delete_process">Do you really want to delete process</string>
     <string name="created_on">Created on</string>
+    <string name="confirm_delete_process_step">Do you really want to delete step</string>
+    <string name="process_step_deleted">Process step deleted</string>
 
 </resources>

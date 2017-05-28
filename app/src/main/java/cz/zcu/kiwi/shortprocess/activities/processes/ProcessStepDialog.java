@@ -13,14 +13,12 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 
 import cz.zcu.kiwi.shortprocess.R;
+import cz.zcu.kiwi.shortprocess.model.Interval;
 import cz.zcu.kiwi.shortprocess.model.service.ProcessSteps;
 
 public class ProcessStepDialog extends DialogFragment {
 
-    private long id;
-    private String caption;
-    private String description;
-    private long intervalSinceStart;
+    Bundle stepArgs = new Bundle();
 
     private EditText textCaption;
     private EditText textDescription;
@@ -32,10 +30,8 @@ public class ProcessStepDialog extends DialogFragment {
     private DialogInterface.OnClickListener onSave;
 
     public void setArguments(Bundle bundle) {
-        this.id = bundle.getLong(ProcessSteps.ID, -1);
-        this.caption = bundle.getString(ProcessSteps.CAPTION, "");
-        this.description = bundle.getString(ProcessSteps.DESCRIPTION, "");
-        this.intervalSinceStart = bundle.getLong(ProcessSteps.INTERVAL_AFTER_START, 0);
+        stepArgs = bundle;
+//        stepArgs.getLong(ProcessSteps.ID, -1);
     }
 
     public void setOnSave(DialogInterface.OnClickListener onSave) {
@@ -59,9 +55,18 @@ public class ProcessStepDialog extends DialogFragment {
         numberMinutes = (NumberPicker) view.findViewById(R.id.numberMinutes);
         numberSeconds = (NumberPicker) view.findViewById(R.id.numberSeconds);
 
+        textCaption.setText(stepArgs.getString(ProcessSteps.CAPTION, ""));
+        textDescription.setText(stepArgs.getString(ProcessSteps.DESCRIPTION, ""));
+
+        Interval i = new Interval(stepArgs.getLong(ProcessSteps.INTERVAL_AFTER_START, 0));
+
+        numberDays.setValue(i.getDays());
+        numberHours.setValue(i.getHours());
+        numberMinutes.setValue(i.getMinutes());
+        numberSeconds.setValue(i.getSeconds());
+
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        int[] intervalParts = ProcessSteps.splitInterval(intervalSinceStart);
 
         builder.setView(view)
                 // Add action buttons
@@ -77,13 +82,13 @@ public class ProcessStepDialog extends DialogFragment {
 
     public Bundle getStepArgs() {
         Bundle b = new Bundle();
-        long interval = ProcessSteps.joinInterval(numberSeconds.getValue(), numberMinutes.getValue(),
+        Interval interval = new Interval(numberSeconds.getValue(), numberMinutes.getValue(),
                 numberHours.getValue(), numberDays.getValue());
 
         b.putString(ProcessSteps.CAPTION, textCaption.getText().toString());
         b.putString(ProcessSteps.DESCRIPTION, textDescription.getText().toString());
 
-        b.putLong(ProcessSteps.INTERVAL_AFTER_START, interval);
+        b.putLong(ProcessSteps.INTERVAL_AFTER_START, interval.toSeconds());
 
         return b;
     }

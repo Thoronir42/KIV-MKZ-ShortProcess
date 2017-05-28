@@ -14,9 +14,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-
 import cz.zcu.kiwi.shortprocess.R;
+import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
@@ -30,7 +29,6 @@ public class EditProcessActivity extends AppCompatActivity {
     public static final String ACTION_EDIT = "edit";
 
     private SQLHelper db;
-    private DateFormat dateFormat;
 
     private Process process;
 
@@ -47,13 +45,31 @@ public class EditProcessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_process);
 
         this.db = new SQLHelper(this);
-        this.dateFormat = android.text.format.DateFormat.getDateFormat(this);
 
         this.textTitle = (EditText) findViewById(R.id.title);
         this.textDescription = (EditText) findViewById(R.id.description);
         this.listProcessSteps = (ListView) findViewById(R.id.processSteps);
 
         this.processSteps = new ProcessStepListAdapter(this, R.layout.process_step_list_item);
+        this.processSteps.setOnDelete(new ProcessStepListAdapter.ProcessStepClickListener() {
+            @Override
+            void onClick(long processStepId) {
+                ProcessStep step = db.getProcessSteps().find(processStepId);
+                if (step != null) {
+                    confirmDeleteProcessStep(step);
+                }
+            }
+        });
+        this.processSteps.setOnClick(new ProcessStepListAdapter.ProcessStepClickListener() {
+            @Override
+            void onClick(long processStepId) {
+                ProcessStep step = db.getProcessSteps().find(processStepId);
+                if(step != null) {
+                    showEditStepDialog(step);
+                }
+            }
+        });
+
         this.listProcessSteps.setAdapter(this.processSteps);
 
         buttonAddStep = (Button) findViewById(R.id.button_add_step);
@@ -123,7 +139,10 @@ public class EditProcessActivity extends AppCompatActivity {
     }
 
     private void loadSteps() {
-        this.processSteps.setItems(this.db.getProcessSteps().findStepsOfProcess(process.getId()));
+        ModelCursor<ProcessStep> cursor = this.db.getProcessSteps().findStepsOfProcess(process.getId());
+        this.processSteps.setItems(cursor);
+
+        cursor.close();
     }
 
     private boolean saveProcess() {
@@ -161,7 +180,7 @@ public class EditProcessActivity extends AppCompatActivity {
     }
 
     private boolean confirmDelete() {
-        String message = getResources().getString(R.string.confirm_delete_process) + process.getTitle() + "?";
+        String message = getResources().getString(R.string.confirm_delete_process) + " " + process.getTitle() + "?";
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(R.string.confirm_delete)
@@ -218,5 +237,69 @@ public class EditProcessActivity extends AppCompatActivity {
             }
         });
         processStepDialog.show(this.getSupportFragmentManager(), "newStepDialog");
+    }
+
+    private void showEditStepDialog(final ProcessStep step) {
+        final ProcessStepDialog processStepDialog = new ProcessStepDialog();
+
+        Bundle currentValues = new Bundle();
+        currentValues.putLong(ProcessSteps.ID, step.getId());
+        currentValues.putString(ProcessSteps.CAPTION, step.getCaption());
+        currentValues.putString(ProcessSteps.DESCRIPTION, step.getDescription());
+        currentValues.putLong(ProcessSteps.INTERVAL_AFTER_START, step.getIntervalAfterStart());
+        processStepDialog.setArguments(currentValues);
+
+        processStepDialog.setOnSave(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Bundle newValues = processStepDialog.getStepArgs();
+
+                step.setCaption(newValues.getString(ProcessSteps.CAPTION));
+                step.setDescription(newValues.getString(ProcessSteps.DESCRIPTION));
+                step.setIntervalAfterStart(newValues.getLong(ProcessSteps.INTERVAL_AFTER_START));
+
+                if (db.getProcessSteps().update(step) > 0) {
+                    Toast.makeText(EditProcessActivity.this, R.string.process_step_created, Toast.LENGTH_SHORT)
+                            .show();
+                    loadSteps();
+                } else {
+                    Toast.makeText(EditProcessActivity.this, R.string.save_error, Toast.LENGTH_LONG)
+                            .show();
+                }
+
+            }
+        });
+        processStepDialog.show(this.getSupportFragmentManager(), "editStepDialog");
+    }
+
+    //
+
+    private void confirmDeleteProcessStep(final ProcessStep processStep) {
+        String message = getResources().getString(R.string.confirm_delete_process_step) + " " + processStep.getCaption() + "?";
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.confirm_delete)
+                .setMessage(message)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteProcessStep(processStep);
+                    }
+
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+
+    }
+
+    private void deleteProcessStep(ProcessStep processStep) {
+        if (db.getProcessSteps().delete(processStep) > 0) {
+            Toast.makeText(this, R.string.process_step_deleted, Toast.LENGTH_SHORT)
+                    .show();
+            loadSteps();
+        } else {
+            Toast.makeText(this, R.string.delete_failed, Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 }

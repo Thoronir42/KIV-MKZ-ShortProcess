@@ -1,9 +1,9 @@
 package cz.zcu.kiwi.shortprocess.activities.processes;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,7 +17,6 @@ import android.widget.Toast;
 import java.text.DateFormat;
 
 import cz.zcu.kiwi.shortprocess.R;
-import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
@@ -52,7 +51,7 @@ public class EditProcessActivity extends AppCompatActivity {
 
         this.textTitle = (EditText) findViewById(R.id.title);
         this.textDescription = (EditText) findViewById(R.id.description);
-        this.listProcessSteps = (ListView) findViewById(R.id.process_steps);
+        this.listProcessSteps = (ListView) findViewById(R.id.processSteps);
 
         this.processSteps = new ProcessStepListAdapter(this, R.layout.process_step_list_item);
         this.listProcessSteps.setAdapter(this.processSteps);
@@ -93,7 +92,7 @@ public class EditProcessActivity extends AppCompatActivity {
             case R.id.save_process:
                 return saveProcess();
             case R.id.delete_process:
-                return deleteProcess();
+                return confirmDelete();
 
         }
         return super.onOptionsItemSelected(item);
@@ -161,7 +160,27 @@ public class EditProcessActivity extends AppCompatActivity {
         return true;
     }
 
+    private boolean confirmDelete() {
+        String message = getResources().getString(R.string.confirm_delete_process) + process.getTitle() + "?";
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.confirm_delete)
+                .setMessage(message)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteProcess();
+                    }
+
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+
+        return true;
+    }
+
     private boolean deleteProcess() {
+
         if (this.process == null) {
             Toast.makeText(this, R.string.delete_failed, Toast.LENGTH_SHORT)
                     .show();
@@ -173,6 +192,7 @@ public class EditProcessActivity extends AppCompatActivity {
                     .show();
 
         }
+
         Intent intent = new Intent(this, ProcessListActivity.class);
         startActivity(intent);
         return true;
@@ -191,9 +211,9 @@ public class EditProcessActivity extends AppCompatActivity {
                 step.setIntervalAfterStart(b.getLong(ProcessSteps.INTERVAL_AFTER_START));
 
                 if (db.getProcessSteps().insert(step) > 0) {
-                    Toast.makeText(EditProcessActivity.this, R.string.process_step_created, Toast.LENGTH_LONG);
+                    Toast.makeText(EditProcessActivity.this, R.string.process_step_created, Toast.LENGTH_LONG)
+                            .show();
                 }
-                ;
                 loadSteps();
             }
         });

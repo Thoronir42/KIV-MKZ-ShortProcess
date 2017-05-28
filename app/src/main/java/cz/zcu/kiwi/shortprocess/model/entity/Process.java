@@ -11,6 +11,7 @@ public class Process extends BaseEntity {
     public Process(String title, long milliseconds) {
         this(title, new Date(milliseconds));
     }
+
     public Process(String title, Date date_created) {
         this.title = title;
         this.date_created = date_created;
@@ -36,7 +37,7 @@ public class Process extends BaseEntity {
         return date_created;
     }
 
-    public void setDate_created(Date date_created) {
+    /*public void setDateCreated(Date date_created) {
         this.date_created = date_created;
-    }
+    }*/
 }

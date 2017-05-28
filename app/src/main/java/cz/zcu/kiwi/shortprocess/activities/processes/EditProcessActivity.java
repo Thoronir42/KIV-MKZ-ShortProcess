@@ -21,6 +21,7 @@ import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
 import cz.zcu.kiwi.shortprocess.model.service.ProcessSteps;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
+import cz.zcu.kiwi.widgetWrappers.EntityClickListener;
 
 
 public class EditProcessActivity extends AppCompatActivity {
@@ -51,22 +52,16 @@ public class EditProcessActivity extends AppCompatActivity {
         this.listProcessSteps = (ListView) findViewById(R.id.processSteps);
 
         this.processSteps = new ProcessStepListAdapter(this, R.layout.process_step_list_item);
-        this.processSteps.setOnDelete(new ProcessStepListAdapter.ProcessStepClickListener() {
+        this.processSteps.setOnDelete(new EntityClickListener<ProcessStep>() {
             @Override
-            void onClick(long processStepId) {
-                ProcessStep step = db.getProcessSteps().find(processStepId);
-                if (step != null) {
-                    confirmDeleteProcessStep(step);
-                }
+            public void onClick(ProcessStep step) {
+                confirmDeleteProcessStep(step);
             }
         });
-        this.processSteps.setOnClick(new ProcessStepListAdapter.ProcessStepClickListener() {
+        this.processSteps.setOnClick(new EntityClickListener<ProcessStep>() {
             @Override
-            void onClick(long processStepId) {
-                ProcessStep step = db.getProcessSteps().find(processStepId);
-                if(step != null) {
-                    showEditStepDialog(step);
-                }
+            public void onClick(ProcessStep step) {
+                showEditStepDialog(step);
             }
         });
 

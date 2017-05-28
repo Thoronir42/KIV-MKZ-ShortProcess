@@ -8,32 +8,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
 import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.model.Interval;
-import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
+import cz.zcu.kiwi.widgetWrappers.EntityClickListener;
+import cz.zcu.kiwi.widgetWrappers.ModelListAdapter;
 
 
-public class ProcessStepListAdapter extends ArrayAdapter<ProcessStep> {
+public class ProcessStepListAdapter extends ModelListAdapter<ProcessStep> {
 
-    private ProcessStepClickListener onDelete;
-    private ProcessStepClickListener onClick;
+    private EntityClickListener<ProcessStep> onDelete;
 
     public ProcessStepListAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
     }
 
-    public void setOnDelete(ProcessStepClickListener onDelete) {
+    public void setOnDelete(EntityClickListener<ProcessStep> onDelete) {
         this.onDelete = onDelete;
     }
 
-    public void setOnClick(ProcessStepClickListener onClick) {
-        this.onClick = onClick;
-    }
 
     @NonNull
     @Override
@@ -57,7 +53,7 @@ public class ProcessStepListAdapter extends ArrayAdapter<ProcessStep> {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClick.onClick(ps.getId());
+                onClick.onClick(ps);
             }
         });
 
@@ -68,8 +64,9 @@ public class ProcessStepListAdapter extends ArrayAdapter<ProcessStep> {
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    onDelete.onClick(ps.getId());
+                    if(onDelete != null) {
+                        onDelete.onClick(ps);
+                    }
                 }
             });
             buttonDelete.setVisibility(View.VISIBLE);
@@ -78,25 +75,5 @@ public class ProcessStepListAdapter extends ArrayAdapter<ProcessStep> {
         }
 
         return rowView;
-    }
-
-    public void setItems(ModelCursor<ProcessStep> items) {
-        this.clear();
-
-        Log.v("ProcessListAdapter", "Displaying " + items.getCount() + " processes");
-
-        while (items.moveToNext()) {
-            this.add(items.formatCurrent());
-        }
-    }
-
-    public static abstract class ProcessStepClickListener {
-        void onClick(long processStepId) {
-
-        }
-
-        void onLongClick(long processStepId) {
-
-        }
     }
 }

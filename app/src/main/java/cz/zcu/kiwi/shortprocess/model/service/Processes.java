@@ -2,8 +2,6 @@ package cz.zcu.kiwi.shortprocess.model.service;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.Date;
 
@@ -55,9 +53,10 @@ public class Processes extends BaseModelHelper<Process> {
         public ContentValues parse(Process p) {
             ContentValues values = new ContentValues();
 
-            // values.put(DATE_CREATED, p.getDate_created().getTime()); date created should not be updated
+            // values.put(DATE_CREATED, p.getDateCreated().getTime()); date created should not be updated
             values.put(TITLE, p.getTitle());
             values.put(DESCRIPTION, p.getDescription());
+            values.put(DATE_CREATED, p.getDateCreated().getTime());
 
             return values;
         }

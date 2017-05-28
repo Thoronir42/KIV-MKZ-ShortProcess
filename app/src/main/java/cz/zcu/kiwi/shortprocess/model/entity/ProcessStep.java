@@ -4,16 +4,16 @@ package cz.zcu.kiwi.shortprocess.model.entity;
 import android.support.annotation.NonNull;
 
 public class ProcessStep extends BaseEntity {
-    private int process_id;
+    private long process_id;
     private long interval_after_start;
     private String caption;
     private String description;
 
-    public ProcessStep(int process_id) {
+    public ProcessStep(long process_id) {
         this.process_id = process_id;
     }
 
-    public int getProcessId() {
+    public long getProcessId() {
         return process_id;
     }
 

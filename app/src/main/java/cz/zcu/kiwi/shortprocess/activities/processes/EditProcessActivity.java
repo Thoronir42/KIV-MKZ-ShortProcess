@@ -55,12 +55,11 @@ public class EditProcessActivity extends AppCompatActivity {
     private void init(Intent intent) {
         switch (intent.getAction()) {
             case ACTION_CREATE:
-                this.process = null;
+                this.setProcess(null);
                 break;
             case ACTION_EDIT:
-                int id = intent.getIntExtra(Processes.ID, -1);
+                long id = intent.getLongExtra(Processes.ID, -1);
                 Log.v("EditProcessActivity", "Editing process with id " + id);
-
                 this.setProcess(id);
                 break;
         }
@@ -91,20 +90,18 @@ public class EditProcessActivity extends AppCompatActivity {
         this.db.close();
     }
 
-    public void setProcess(int process_id) {
+    public void setProcess(long process_id) {
         setProcess(this.db.getProcesses().find(process_id));
     }
 
     public void setProcess(Process process) {
-        if (process == null) {
-            Log.w("EditProcessActivity", "Attempted to setProcess() with null value");
-            return;
+        this.process = process;
+        if (process != null) {
+            this.textTitle.setText(process.getTitle());
+            this.textDescription.setText(process.getDescription());
+            this.loadSteps();
         }
 
-        Log.i("EditProcessActivity", "Process date is: " + process.getDate_created().toString());
-        this.process = process;
-        this.textTitle.setText(process.getTitle());
-        this.textDescription.setText(process.getDescription());
         this.processSteps.setItems(this.db.getProcessSteps().findStepsOfProcess(process.getId()));
     }
 

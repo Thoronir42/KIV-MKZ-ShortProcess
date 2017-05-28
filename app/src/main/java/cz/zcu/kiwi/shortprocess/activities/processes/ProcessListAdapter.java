@@ -51,7 +51,7 @@ public class ProcessListAdapter extends ArrayAdapter<Process> {
 
         text_title.setText(p.getTitle());
 
-        Date date = p.getDate_created();
+        Date date = p.getDateCreated();
         text_subtitle.setText(date != null ? dateFormat.format(date) : "");
 
         image_icon.setImageResource(R.mipmap.ic_launcher);

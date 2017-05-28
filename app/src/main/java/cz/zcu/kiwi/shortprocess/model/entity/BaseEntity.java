@@ -3,7 +3,7 @@ package cz.zcu.kiwi.shortprocess.model.entity;
 
 public class BaseEntity {
 
-    protected int _id;
+    protected long _id;
 
     public BaseEntity() {
         this(-1);
@@ -13,11 +13,11 @@ public class BaseEntity {
         this._id = id;
     }
 
-    public int getId() {
+    public long getId() {
         return _id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this._id = id;
     }
 }

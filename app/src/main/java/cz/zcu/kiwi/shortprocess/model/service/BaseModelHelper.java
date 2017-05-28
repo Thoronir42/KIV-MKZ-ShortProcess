@@ -21,7 +21,7 @@ abstract class BaseModelHelper<Type extends BaseEntity> {
     }
 
     @Nullable
-    public Type find(int id) {
+    public Type find(long id) {
         SQLiteDatabase db = sql.getReadableDatabase();
         String where = ID + " = ?";
         String[] whereValues = new String[]{"" + id};
@@ -57,6 +57,7 @@ abstract class BaseModelHelper<Type extends BaseEntity> {
         if (result != -1) {
             Log.i("BaseModelHelper", "Entity of type " + getType(entity) + "inserted with " +
                     "_id = " + result);
+            entity.setId(result);
         }
         return result;
     }

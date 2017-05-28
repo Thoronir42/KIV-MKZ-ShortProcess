@@ -29,7 +29,7 @@ public class ProcessSteps extends BaseModelHelper {
         super(sql);
     }
 
-    public ModelCursor<ProcessStep> findStepsOfProcess(int process_id) {
+    public ModelCursor<ProcessStep> findStepsOfProcess(long process_id) {
         SQLiteDatabase db = sql.getReadableDatabase();
         String where = PROCESS_ID + " = ?";
         String[] whereValues = new String[]{"" + process_id};

@@ -41,7 +41,7 @@
         android:text="@string/process_steps" />
 
     <ListView
-        android:id="@+id/process_steps"
+        android:id="@+id/processSteps"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"/>

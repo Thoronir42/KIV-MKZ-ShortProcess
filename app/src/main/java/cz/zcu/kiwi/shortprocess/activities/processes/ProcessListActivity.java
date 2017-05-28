@@ -30,14 +30,10 @@ public class ProcessListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_process_list);
 
         this.sql = new SQLHelper(this);
-        Processes processes = this.sql.getProcesses();
 
         processAdapter = new ProcessListAdapter(this, R.layout.process_list_item);
         processList = prepareProcessList(processAdapter);
 
-        ModelCursor<Process> cursor = processes.findAll();
-        processAdapter.setItems(cursor);
-        cursor.close();
 
 
         /*toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -56,6 +52,28 @@ public class ProcessListActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, EditProcessActivity.class);
                 intent.setAction(EditProcessActivity.ACTION_CREATE);
                 startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Processes processes = this.sql.getProcesses();
+        ModelCursor<Process> cursor = processes.findProcessesWithStepCounts();
+        processAdapter.setItems(cursor);
+        cursor.close();
+    }
+
+    private void setUnhandledHandler() {
+        final Thread.UncaughtExceptionHandler defaultHandler = Thread.currentThread().getUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                Log.wtf("UncaughtException", paramThrowable);
+
+                defaultHandler.uncaughtException(paramThread, paramThrowable);
             }
         });
     }

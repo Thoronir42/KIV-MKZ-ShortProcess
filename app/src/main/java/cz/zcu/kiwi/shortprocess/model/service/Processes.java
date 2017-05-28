@@ -2,10 +2,14 @@ package cz.zcu.kiwi.shortprocess.model.service;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
+import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 
@@ -16,12 +20,42 @@ public class Processes extends BaseModelHelper<Process> {
     public static final String TITLE = "title";
     public static final String DESCRIPTION = "description";
 
-    private ProcessParser parser;
+    public static final String EXTRA_STEP_COUNT = "step_count";
 
     public Processes(SQLHelper sql) {
         super(sql);
     }
 
+
+    public ModelCursor<Process> findProcessesWithStepCounts() {
+        String select = "SELECT p.*" +
+                ", COUNT(ps._id) AS " + EXTRA_STEP_COUNT +
+                " FROM " + TABLE + " p" +
+                " LEFT JOIN " + ProcessSteps.TABLE + " ps ON p._id = ps.process_id" +
+                " GROUP BY p._id";
+
+        SQLiteDatabase db = sql.getReadableDatabase();
+        Cursor cursor = db.rawQuery(select, null);
+
+        ProcessParser parser = new ProcessParser() {
+            @Override
+            public Process parse(Cursor c) {
+                Process process = super.parse(c);
+                Log.d("Processes", "Column has these columns: " + Arrays.toString(c.getColumnNames()));
+                int stepCount = c.getInt(c.getColumnIndex(EXTRA_STEP_COUNT));
+
+                Log.d("Processes", "Process " + process.getTitle() + " has " + stepCount + " steps");
+
+                ContentValues extras = process.extras();
+                extras.put(EXTRA_STEP_COUNT, stepCount);
+
+                return process;
+            }
+        };
+
+        //startManagingCursor(cursor);
+        return new ModelCursor<>(cursor, parser);
+    }
 
     @Override
     protected String getTable() {
@@ -30,11 +64,7 @@ public class Processes extends BaseModelHelper<Process> {
 
     @Override
     protected ProcessParser getEntityParser() {
-        if (parser == null) {
-            parser = new ProcessParser();
-        }
-
-        return parser;
+        return new ProcessParser();
     }
 
     private static class ProcessParser extends EntityParser<Process> {

@@ -1,5 +1,6 @@
 package cz.zcu.kiwi.shortprocess.activities.processes;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import java.util.Date;
 import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
+import cz.zcu.kiwi.shortprocess.model.service.Processes;
 
 
 public class ProcessListAdapter extends ArrayAdapter<Process> {
@@ -44,16 +46,23 @@ public class ProcessListAdapter extends ArrayAdapter<Process> {
         View rowView = convertView != null ? convertView : inflater.inflate(R.layout.process_list_item, parent, false);
 
         TextView text_title = (TextView) rowView.findViewById(R.id.title);
-        TextView text_subtitle = (TextView) rowView.findViewById(R.id.subtitle);
+        TextView text_createdOn = (TextView) rowView.findViewById(R.id.createdOn);
+        TextView text_stepCount = (TextView) rowView.findViewById(R.id.processSteps);
         ImageView image_icon = (ImageView) rowView.findViewById(R.id.icon);
 
         Process p = getItem(position);
-
-        text_title.setText(p.getTitle());
+        ContentValues extras = p.extras();
 
         Date date = p.getDateCreated();
-        text_subtitle.setText(date != null ? dateFormat.format(date) : "");
+        String createdOn = getContext().getResources().getString(R.string.created_on) + ": ";
+        createdOn += date != null ? dateFormat.format(date) : "";
 
+        String stepCount = getContext().getResources().getString(R.string.process_steps) + ": ";
+        stepCount += extras.getAsInteger(Processes.EXTRA_STEP_COUNT);
+
+        text_title.setText(p.getTitle());
+        text_createdOn.setText(createdOn);
+        text_stepCount.setText(stepCount);
         image_icon.setImageResource(R.mipmap.ic_launcher);
 
         return rowView;

@@ -16,7 +16,7 @@
     <string name="processes_create_new">Create new process</string>
     <string name="process_title">Process title</string>
     <string name="process_executions_short">Executions</string>
-    <string name="process_steps">Process steps</string>
+    <string name="process_steps">Steps</string>
     <string name="process_description">Process description</string>
     <string name="process_title_ex">Rose candle</string>
     <string name="process_description_ex">Lovely smelling candles for any occasion</string>
@@ -32,5 +32,6 @@
     <string name="step_alert_delay">Step delay from start</string>
     <string name="process_step_created">Step created</string>
     <string name="confirm_delete_process">Do you really want to delete process</string>
+    <string name="created_on">Created on</string>
 
 </resources>

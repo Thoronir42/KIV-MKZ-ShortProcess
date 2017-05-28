@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.Scanner;
 
 import cz.zcu.kiwi.shortprocess.R;
+import cz.zcu.kiwi.shortprocess.model.service.ProcessRuns;
 import cz.zcu.kiwi.shortprocess.model.service.ProcessSteps;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
 
@@ -23,6 +24,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     private Processes processes;
     private ProcessSteps processSteps;
+    private ProcessRuns processRuns;
 
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -75,10 +77,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public ProcessSteps getProcessSteps() {
         if(this.processSteps == null) {
             this.processSteps = new ProcessSteps(this);
-            Log.v("SQLiteHelper", "Created Processes helper class");
+            Log.v("SQLiteHelper", "Created ProcessSteps helper class");
         }
 
         return this.processSteps;
+    }
+
+    public ProcessRuns getProcessRuns() {
+        if(this.processRuns == null) {
+            this.processRuns = new ProcessRuns(this);
+            Log.v("SQLiteHelper", "Created ProcessRuns helper class");
+        }
+
+        return this.processRuns;
     }
 
 

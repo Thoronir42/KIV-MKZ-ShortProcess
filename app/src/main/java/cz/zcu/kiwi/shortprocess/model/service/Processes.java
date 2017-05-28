@@ -95,7 +95,7 @@ public class Processes extends BaseModelHelper<Process> {
         public ContentValues parse(Process p) {
             ContentValues values = new ContentValues();
 
-            // values.put(DATE_CREATED, p.getDateCreated().getTime()); date created should not be updated
+            values.put(DATE_CREATED, p.getDateCreated().getTime());
             values.put(TITLE, p.getTitle());
             values.put(DESCRIPTION, p.getDescription());
             values.put(DATE_CREATED, p.getDateCreated().getTime());

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 public class ProcessStep extends BaseEntity {
     private int process_id;
-    private int interval_after_start;
+    private long interval_after_start;
     private String caption;
     private String description;
 
@@ -21,11 +21,11 @@ public class ProcessStep extends BaseEntity {
         this.process_id = process_id;
     }*/
 
-    public int getIntervalAfterStart() {
+    public long getIntervalAfterStart() {
         return interval_after_start;
     }
 
-    public void setIntervalAfterStart(int interval_after_start) {
+    public void setIntervalAfterStart(long interval_after_start) {
         this.interval_after_start = interval_after_start;
     }
 

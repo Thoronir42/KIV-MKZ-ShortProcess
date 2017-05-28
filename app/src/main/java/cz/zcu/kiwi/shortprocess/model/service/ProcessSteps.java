@@ -3,6 +3,7 @@ package cz.zcu.kiwi.shortprocess.model.service;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
@@ -17,6 +18,11 @@ public class ProcessSteps extends BaseModelHelper {
     public static final String CAPTION = "caption";
     public static final String DESCRIPTION = "description";
 
+    public static final int INTERVAL_SECOND = 0;
+    public static final int INTERVAL_MINUTE = 1;
+    public static final int INTERVAL_HOUR = 2;
+    public static final int INTERVAL_DAY = 3;
+
     private ProcessStepParser parser;
 
     public ProcessSteps(SQLHelper sql) {
@@ -28,7 +34,7 @@ public class ProcessSteps extends BaseModelHelper {
         String where = PROCESS_ID + " = ?";
         String[] whereValues = new String[]{"" + process_id};
         Cursor cursor = db.query(getTable(), null, where, whereValues, null,
-                null, null);
+                null, INTERVAL_AFTER_START + " ASC");
 
         return new ModelCursor<>(cursor, getEntityParser());
     }
@@ -45,6 +51,51 @@ public class ProcessSteps extends BaseModelHelper {
         }
 
         return parser;
+    }
+
+    /**
+     * Normalizes provided interval units into second
+     * Usage: <code>joinInterval(int seconds [, int minutes [, int hours [, int days]]]</code>
+     * @param parts
+     * @return interval in seconds
+     */
+    public static long joinInterval(@NonNull int... parts) {
+        if(parts.length < 1 || parts.length > 4) {
+            throw new IllegalArgumentException("Method takes 1 to 4 arguments, " + parts.length + " given");
+        }
+        long interval = 0; // interval [days]
+        if(parts.length > INTERVAL_DAY) {
+            interval += parts[INTERVAL_DAY];
+        }
+        interval *= 24;    // interval [hours]
+
+        if(parts.length > INTERVAL_HOUR) {
+            interval += parts[INTERVAL_HOUR];
+        }
+        interval *= 60;    // interval [minutes]
+
+        if(parts.length > INTERVAL_MINUTE) {
+            interval += parts[INTERVAL_MINUTE];
+        }
+        interval *= 60;    // interval [seconds]
+
+        interval += parts[INTERVAL_SECOND];
+
+        return interval;
+    }
+
+    public static int[] splitInterval(long intervalSinceStart) {
+        long seconds = intervalSinceStart % 60;
+        long minutes = intervalSinceStart / 60;
+        long hours = minutes / 60;
+        long days = hours / 24;
+
+        return new int[]{
+                (int) seconds,
+                (int) (minutes % 60),
+                (int) (hours % 24),
+                (int) days
+        };
     }
 
     private static class ProcessStepParser extends EntityParser<ProcessStep> {

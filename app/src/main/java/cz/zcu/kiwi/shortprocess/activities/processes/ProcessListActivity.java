@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.Random;
-
 import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;

@@ -6,13 +6,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
-
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.SQLHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.BaseEntity;
-import cz.zcu.kiwi.shortprocess.model.entity.Process;
 
 abstract class BaseModelHelper<Type extends BaseEntity> {
     public static final String ID = "_id";

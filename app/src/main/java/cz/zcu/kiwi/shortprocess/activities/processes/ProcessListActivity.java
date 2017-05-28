@@ -34,15 +34,7 @@ public class ProcessListActivity extends AppCompatActivity {
         processAdapter = new ProcessListAdapter(this, R.layout.process_list_item);
         processList = prepareProcessList(processAdapter);
 
-
-
-        /*toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Log.v("ProcessListActivity", "Toolbar item clicked of id " + item.getItemId());
-                return false;
-            }
-        });*/
+//        setUnhandledHandler();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final Context context = this;

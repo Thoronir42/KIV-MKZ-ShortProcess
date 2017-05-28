@@ -69,6 +69,7 @@ public class ProcessListAdapter extends ArrayAdapter<Process> {
     }
 
     public void setItems(ModelCursor<Process> items) {
+        this.clear();
         Log.v("ProcessListAdapter", "Displaying " + items.getCount() + " processes");
 
         while (items.moveToNext()) {

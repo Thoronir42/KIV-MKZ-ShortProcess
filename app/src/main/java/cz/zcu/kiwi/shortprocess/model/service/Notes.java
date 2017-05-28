@@ -1,8 +1,7 @@
 package cz.zcu.kiwi.shortprocess.model.service;
 
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
-import cz.zcu.kiwi.shortprocess.model.ModelCursor;
-import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 
 public class Notes extends BaseModelHelper {
     public static final String TABLE = "sp__note";
@@ -13,7 +12,7 @@ public class Notes extends BaseModelHelper {
     public static final String ATTACHED_FILE = "attached_file";
     public static final String CONTENT = "content";
 
-    Notes(SQLHelper sql) {
+    Notes(SQLiteHelper sql) {
         super(sql);
     }
 

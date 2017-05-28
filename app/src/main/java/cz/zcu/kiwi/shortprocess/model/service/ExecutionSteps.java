@@ -1,8 +1,7 @@
 package cz.zcu.kiwi.shortprocess.model.service;
 
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
-import cz.zcu.kiwi.shortprocess.model.ModelCursor;
-import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 
 public class ExecutionSteps extends BaseModelHelper {
     public static final String TABLE = "sp__execution_step";
@@ -15,7 +14,7 @@ public class ExecutionSteps extends BaseModelHelper {
     public static final int STATUS_SCHEDULED = 0;
     public static final int STATUS_PROCESSED = 1;
 
-    ExecutionSteps(SQLHelper sql) {
+    ExecutionSteps(SQLiteHelper sql) {
         super(sql);
     }
 

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
-import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
 
 public class ProcessSteps extends BaseModelHelper<ProcessStep> {
@@ -17,7 +17,7 @@ public class ProcessSteps extends BaseModelHelper<ProcessStep> {
     public static final String CAPTION = "caption";
     public static final String DESCRIPTION = "description";
 
-    public ProcessSteps(SQLHelper sql) {
+    public ProcessSteps(SQLiteHelper sql) {
         super(sql);
     }
 

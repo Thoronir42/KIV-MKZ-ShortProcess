@@ -3,6 +3,7 @@ package cz.zcu.kiwi.shortprocess.model.service;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -10,8 +11,9 @@ import java.util.Date;
 
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
-import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
+import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
 
 public class Processes extends BaseModelHelper<Process> {
     public static final String TABLE = "sp__process";
@@ -22,7 +24,7 @@ public class Processes extends BaseModelHelper<Process> {
 
     public static final String EXTRA_STEP_COUNT = "step_count";
 
-    public Processes(SQLHelper sql) {
+    public Processes(SQLiteHelper sql) {
         super(sql);
     }
 
@@ -55,6 +57,16 @@ public class Processes extends BaseModelHelper<Process> {
 
         //startManagingCursor(cursor);
         return new ModelCursor<>(cursor, parser);
+    }
+
+    @Override
+    public int delete(@NonNull Process entity) {
+        int deleted = super.delete(entity);
+        if(deleted > 0) {
+            deleted += sql.getProcessSteps().delete(ProcessSteps.PROCESS_ID + " = ?",
+                    new String[]{"" + entity.getId()}, ProcessStep.class.getSimpleName());
+        }
+        return deleted;
     }
 
     @Override

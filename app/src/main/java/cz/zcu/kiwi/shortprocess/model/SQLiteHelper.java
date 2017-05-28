@@ -15,7 +15,7 @@ import cz.zcu.kiwi.shortprocess.model.service.Processes;
 /**
  * Helper to the database, manages versions and creation
  */
-public class SQLHelper extends SQLiteOpenHelper {
+public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "kiwi_short_process.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -24,21 +24,21 @@ public class SQLHelper extends SQLiteOpenHelper {
     private Processes processes;
     private ProcessSteps processSteps;
 
-    public SQLHelper(Context context) {
+    public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.i("SQLHelper", "Creating DB");
+        Log.i("SQLiteHelper", "Creating DB");
 
         Scanner s = new Scanner(context.getResources().openRawResource(R.raw.short_process_create))
                 .useDelimiter(";");
         while(s.hasNext()) {
             String query = s.next().trim();
             if(query.length() > 0) {
-                Log.i("SQLHelper", "Query: " + query);
+                Log.i("SQLiteHelper", "Query: " + query);
                 db.execSQL(query);
             }
 
@@ -66,7 +66,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     public Processes getProcesses() {
         if(this.processes == null) {
             this.processes = new Processes(this);
-            Log.v("SQLHelper", "Created Processes helper class");
+            Log.v("SQLiteHelper", "Created Processes helper class");
         }
 
         return this.processes;
@@ -75,7 +75,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     public ProcessSteps getProcessSteps() {
         if(this.processSteps == null) {
             this.processSteps = new ProcessSteps(this);
-            Log.v("SQLHelper", "Created Processes helper class");
+            Log.v("SQLiteHelper", "Created Processes helper class");
         }
 
         return this.processSteps;

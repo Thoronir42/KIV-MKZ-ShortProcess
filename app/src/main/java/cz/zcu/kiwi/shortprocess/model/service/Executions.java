@@ -1,7 +1,7 @@
 package cz.zcu.kiwi.shortprocess.model.service;
 
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
-import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Execution;
 
 public class Executions extends BaseModelHelper {
@@ -11,7 +11,7 @@ public class Executions extends BaseModelHelper {
     public static final String DATE_STARTED = "date_started";
     public static final String DATE_FINISHED = "date_finished";
 
-    Executions(SQLHelper sql) {
+    Executions(SQLiteHelper sql) {
         super(sql);
     }
 

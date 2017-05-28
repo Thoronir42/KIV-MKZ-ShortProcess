@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
-import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
 import cz.zcu.kiwi.shortprocess.model.service.ProcessSteps;
@@ -28,7 +28,7 @@ public class EditProcessActivity extends AppCompatActivity {
     public static final String ACTION_CREATE = "create";
     public static final String ACTION_EDIT = "edit";
 
-    private SQLHelper db;
+    private SQLiteHelper db;
 
     private Process process;
 
@@ -44,7 +44,7 @@ public class EditProcessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_process);
 
-        this.db = new SQLHelper(this);
+        this.db = new SQLiteHelper(this);
 
         this.textTitle = (EditText) findViewById(R.id.title);
         this.textDescription = (EditText) findViewById(R.id.description);

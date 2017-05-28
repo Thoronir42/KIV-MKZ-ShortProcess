@@ -15,11 +15,11 @@ import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
-import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 
 public class ProcessListActivity extends AppCompatActivity {
 
-    SQLHelper sql;
+    SQLiteHelper sql;
 
     private ListView processList;
     private ProcessListAdapter processAdapter;
@@ -29,7 +29,7 @@ public class ProcessListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_process_list);
 
-        this.sql = new SQLHelper(this);
+        this.sql = new SQLiteHelper(this);
 
         processAdapter = new ProcessListAdapter(this, R.layout.process_list_item);
         processList = prepareProcessList(processAdapter);

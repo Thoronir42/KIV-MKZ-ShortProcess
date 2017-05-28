@@ -8,15 +8,15 @@ import android.util.Log;
 
 import cz.zcu.kiwi.shortprocess.model.EntityParser;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
-import cz.zcu.kiwi.shortprocess.model.SQLHelper;
+import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.BaseEntity;
 
 abstract class BaseModelHelper<Type extends BaseEntity> {
     public static final String ID = "_id";
 
-    protected final SQLHelper sql;
+    protected final SQLiteHelper sql;
 
-    BaseModelHelper(SQLHelper sql) {
+    BaseModelHelper(SQLiteHelper sql) {
         this.sql = sql;
     }
 
@@ -85,14 +85,20 @@ abstract class BaseModelHelper<Type extends BaseEntity> {
             return -1;
         }
 
-        SQLiteDatabase db = this.sql.getWritableDatabase();
         String[] whereArgs = new String[]{"" + entity.getId()};
-        int result = db.delete(getTable(), ID + " = ?", whereArgs);
+        return delete(ID + " = ?", whereArgs, getType(entity));
+    }
+
+    public int delete(String where, String[] whereArgs, String type) {
+        SQLiteDatabase db = this.sql.getWritableDatabase();
+
+        int result = db.delete(getTable(), where, whereArgs);
         db.close();
 
         if (result > 0) {
-            Log.i("BaseModelHelper", "Deleted " + result + " entities of type " + getType(entity));
+            Log.i("BaseModelHelper", "Deleted " + result + " entities of type " + type);
         }
+
         return result;
     }
 
@@ -100,7 +106,7 @@ abstract class BaseModelHelper<Type extends BaseEntity> {
 
     protected abstract EntityParser<Type> getEntityParser();
 
-    private String getType(Type t) {
+    protected String getType(Type t) {
         if(t == null) {
             return "null";
         }

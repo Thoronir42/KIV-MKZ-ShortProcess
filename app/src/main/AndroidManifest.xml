@@ -16,10 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.processes.EditProcessActivity"
-            android:parentActivityName=".activities.processes.ProcessListActivity">
+        <activity
+            android:name=".activities.processes.EditProcessActivity"
+            android:parentActivityName=".activities.processes.ProcessListActivity" />
 
-        </activity>
+        <activity
+            android:name=".activities.runs.ProcessRunsActivity"
+            android:parentActivityName=".activities.processes.ProcessListActivity" />
     </application>
 
 </manifest>

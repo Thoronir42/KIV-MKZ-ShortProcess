@@ -35,5 +35,6 @@
     <string name="created_on">Created on</string>
     <string name="confirm_delete_process_step">Do you really want to delete step</string>
     <string name="process_step_deleted">Process step deleted</string>
+    <string name="started_on">Started on</string>
 
 </resources>

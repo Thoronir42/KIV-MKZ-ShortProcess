@@ -55,7 +55,7 @@ abstract class BaseModelHelper<Type extends BaseEntity> {
         db.close();
 
         if (result != -1) {
-            Log.i("BaseModelHelper", "Entity of type " + getType(entity) + "inserted with " +
+            Log.i("BaseModelHelper", "Entity of type " + getType(entity) + " inserted with " +
                     "_id = " + result);
             entity.setId(result);
         }

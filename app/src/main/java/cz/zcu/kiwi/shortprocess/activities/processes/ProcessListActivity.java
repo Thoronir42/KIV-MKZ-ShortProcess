@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import cz.zcu.kiwi.shortprocess.R;
+import cz.zcu.kiwi.shortprocess.activities.runs.ProcessRunsActivity;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
@@ -34,7 +38,7 @@ public class ProcessListActivity extends AppCompatActivity {
         processAdapter = new ProcessListAdapter(this, R.layout.process_list_item);
         processList = prepareProcessList(processAdapter);
 
-//        setUnhandledHandler();
+        setUnhandledHandler();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final Context context = this;
@@ -58,6 +62,30 @@ public class ProcessListActivity extends AppCompatActivity {
         cursor.close();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        sql.close();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.process_list_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.processListMenu_showRuns:
+                return showRunsActivity();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    //              private
+
     private void setUnhandledHandler() {
         final Thread.UncaughtExceptionHandler defaultHandler = Thread.currentThread().getUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -65,7 +93,7 @@ public class ProcessListActivity extends AppCompatActivity {
             public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
                 Log.wtf("UncaughtException", paramThrowable);
 
-                defaultHandler.uncaughtException(paramThread, paramThrowable);
+                System.exit(1);
             }
         });
     }
@@ -94,11 +122,9 @@ public class ProcessListActivity extends AppCompatActivity {
         return view;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        sql.close();
+    private boolean showRunsActivity() {
+        Intent intent = new Intent(this, ProcessRunsActivity.class);
+        startActivity(intent);
+        return true;
     }
-
-
 }

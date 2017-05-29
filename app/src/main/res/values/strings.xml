@@ -36,8 +36,11 @@
     <string name="confirm_delete_process_step">Do you really want to delete step</string>
     <string name="process_step_deleted">Process step deleted</string>
     <string name="started_on">Started on</string>
+
     <string name="process_runs">Process runs</string>
     <string name="process_run_created">Process started</string>
     <string name="process_run_stopped">Process run stopped</string>
+
+    <string name="process_run_steps_completed">Completed process steps</string>
 
 </resources>

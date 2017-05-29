@@ -79,6 +79,12 @@ public class ProcessRunListAdapter extends ModelListAdapter<ProcessRun> {
         text_startedOn.setText(startedOn);
         text_runCompletion.setText(stepCount);
 
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClick.onClick(pr);
+            }
+        });
         buttonStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

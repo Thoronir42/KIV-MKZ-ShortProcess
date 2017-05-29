@@ -41,9 +41,6 @@ public class ProcessListAdapter extends ModelListAdapter<Process> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        LayoutInflater inflater = (LayoutInflater) getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         View rowView = convertView != null ? convertView : inflater.inflate(R.layout.process_list_item, parent, false);
 
         TextView text_title = (TextView) rowView.findViewById(R.id.title);

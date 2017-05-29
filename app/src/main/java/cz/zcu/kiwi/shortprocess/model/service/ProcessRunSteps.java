@@ -11,6 +11,7 @@ import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessRun;
 import cz.zcu.kiwi.shortprocess.model.entity.ProcessRunStep;
+import cz.zcu.kiwi.shortprocess.model.entity.ProcessStep;
 
 public class ProcessRunSteps extends BaseModelHelper<ProcessRunStep> {
     public static final String TABLE = "sp__execution_step";
@@ -25,6 +26,7 @@ public class ProcessRunSteps extends BaseModelHelper<ProcessRunStep> {
 
     public static final String EXTRA_STEP_CAPTION = "_step_caption";
     public static final String EXTRA_IS_COMPLETED = "_is_completed";
+    public static final String EXTRA_STEP_ID = "_step_id";
 
     public ProcessRunSteps(SQLiteHelper sql) {
         super(sql);
@@ -34,13 +36,17 @@ public class ProcessRunSteps extends BaseModelHelper<ProcessRunStep> {
         String select = "SELECT prs.*" +
                 ",   ps." + ProcessSteps.CAPTION + " AS " + EXTRA_STEP_CAPTION +
                 ",   CASE WHEN prs._id IS NOT NULL THEN 1 ELSE 0 END AS " + EXTRA_IS_COMPLETED +
-                " FROM " + TABLE + " prs" +
-                " JOIN " + ProcessRuns.TABLE + " pr" +
-                "   ON pr." + ProcessRuns.ID + " = ?" +
+                ",   ps." + ProcessSteps.ID + " AS " + EXTRA_STEP_ID +
+                " FROM " + ProcessRuns.TABLE + " pr" +
                 " JOIN " + Processes.TABLE + " p" +
                 "   ON p." + Processes.ID + " = pr." + ProcessRuns.PROCESS_ID +
                 " JOIN " + ProcessSteps.TABLE + " ps" +
-                "   ON ps." + ProcessSteps.PROCESS_ID + " = p." + Processes.ID;
+                "   ON ps." + ProcessSteps.PROCESS_ID + " = p." + Processes.ID +
+                " LEFT JOIN " + TABLE + " prs" +
+                "   ON prs." + ProcessRunSteps.PROCESS_RUN_ID + " = pr." + ProcessRuns.ID +
+                "   AND prs." + ProcessRunSteps.PROCESS_STEP_ID + " = ps." + ProcessSteps.ID + 
+                " WHERE pr." + Processes.ID + " = ?" +
+                " ORDER BY ps." + ProcessSteps.INTERVAL_AFTER_START + " ASC";
 
         String[] where = {"" + processRunId};
         Cursor c = sql.getReadableDatabase().rawQuery(select, where);
@@ -53,6 +59,7 @@ public class ProcessRunSteps extends BaseModelHelper<ProcessRunStep> {
 
                 extras.put(EXTRA_STEP_CAPTION, c.getString(c.getColumnIndex(EXTRA_STEP_CAPTION)));
                 extras.put(EXTRA_IS_COMPLETED, c.getInt(c.getColumnIndex(EXTRA_IS_COMPLETED)) != 0);
+                extras.put(EXTRA_STEP_ID, c.getLong(c.getColumnIndex(EXTRA_STEP_ID)));
                 return step;
             }
         };

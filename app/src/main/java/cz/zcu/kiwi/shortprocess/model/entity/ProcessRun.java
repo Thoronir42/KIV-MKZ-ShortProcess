@@ -10,7 +10,8 @@ public class ProcessRun extends BaseEntity {
     private Date date_finished;
 
     public ProcessRun(long processId, Date dateStarted) {
-
+        this.process_id = processId;
+        this.date_started = dateStarted;
     }
 
     public long getProcessId() {

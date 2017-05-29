@@ -14,7 +14,7 @@ public class BaseEntity {
         this(-1);
     }
 
-    public BaseEntity(int id) {
+    public BaseEntity(long id) {
         this._id = id;
         this.extras = new ContentValues();
     }

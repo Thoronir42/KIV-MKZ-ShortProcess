@@ -32,13 +32,14 @@ public final class ProcessRuns extends BaseModelHelper<ProcessRun> {
         SQLiteDatabase db = this.sql.getReadableDatabase();
 
 
-        String select = "SELECT pr.*" +
-                ", p." + Processes.TITLE + " AS " + EXTRA_PROCESS_TITLE +
-                ", COUNT(ps._id) AS " + EXTRA_TOTAL_STEPS +
-                ", COUNT(CASE WHEN prs._id IS NOT NULL THEN 1 END) AS " + EXTRA_COMPLETED_STEPS +
+        String select = "SELECT" +
+                "   pr.*" +
+                ",  p." + Processes.TITLE + " AS " + EXTRA_PROCESS_TITLE +
+                ",  COUNT(ps._id) AS " + EXTRA_TOTAL_STEPS +
+                ",  COUNT(CASE WHEN prs._id IS NOT NULL THEN 1 END) AS " + EXTRA_COMPLETED_STEPS +
                 " FROM " + TABLE + " pr" +
                 " LEFT JOIN " + Processes.TABLE + " p" +
-                "   ON pr." + Processes.ID + " = p." + Processes.ID +
+                "   ON p." + Processes.ID + " = pr." + PROCESS_ID +
                 " LEFT JOIN " + ProcessSteps.TABLE + " ps" +
                 "   ON ps." + ProcessSteps.PROCESS_ID + " = p." + Processes.ID +
                 " LEFT JOIN " + ProcessRunSteps.TABLE + " prs" +
@@ -46,7 +47,8 @@ public final class ProcessRuns extends BaseModelHelper<ProcessRun> {
                 "   AND prs." + ProcessRunSteps.PROCESS_STEP_ID + " = ps." + ProcessSteps.ID +
                 " WHERE" +
                 "   pr." + ID + " IS NOT NULL" +
-                "   AND pr." + DATE_FINISHED + " IS NOT NULL";
+                " GROUP BY" +
+                "   pr." + ID;
 
         Cursor c = db.rawQuery(select, null);
 
@@ -56,10 +58,11 @@ public final class ProcessRuns extends BaseModelHelper<ProcessRun> {
                 ProcessRun run = super.parse(c);
                 ContentValues extras = run.extras();
 
-                extras.put(EXTRA_PROCESS_TITLE, c.getString(c.getColumnIndex(EXTRA_PROCESS_TITLE)));
+                String processTitle = c.getString(c.getColumnIndex(EXTRA_PROCESS_TITLE));
+                Log.i("ProcessRuns", "Process title of process " + run.getProcessId() + " is " + processTitle);
+                extras.put(EXTRA_PROCESS_TITLE, processTitle);
                 extras.put(EXTRA_TOTAL_STEPS, c.getInt(c.getColumnIndex(EXTRA_TOTAL_STEPS)));
                 extras.put(EXTRA_COMPLETED_STEPS, c.getInt(c.getColumnIndex(EXTRA_COMPLETED_STEPS)));
-
 
                 return run;
             }
@@ -87,6 +90,7 @@ public final class ProcessRuns extends BaseModelHelper<ProcessRun> {
             Date dateFinished = new Date(c.getLong(c.getColumnIndex(DATE_FINISHED)));
 
             ProcessRun run = new ProcessRun(processId, dateStarted);
+            run.setId(c.getLong(c.getColumnIndex(ID)));
             run.setDateFinished(dateFinished);
 
             return run;
@@ -96,9 +100,12 @@ public final class ProcessRuns extends BaseModelHelper<ProcessRun> {
         public ContentValues parse(ProcessRun entity) {
             ContentValues cv = new ContentValues();
 
+            Date dateStarted = entity.getDateStarted();
+            Date dateFinished = entity.getDateFinished();
+
             cv.put(PROCESS_ID, entity.getProcessId());
-            cv.put(DATE_STARTED, entity.getDateStarted().getTime());
-            cv.put(DATE_FINISHED, entity.getDateFinished().getTime());
+            cv.put(DATE_STARTED, dateStarted == null ? null : dateStarted.getTime());
+            cv.put(DATE_FINISHED, dateFinished == null ? null : dateFinished.getTime());
 
             return cv;
         }

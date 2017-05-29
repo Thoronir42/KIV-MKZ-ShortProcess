@@ -59,7 +59,6 @@ public final class ProcessRuns extends BaseModelHelper<ProcessRun> {
                 ContentValues extras = run.extras();
 
                 String processTitle = c.getString(c.getColumnIndex(EXTRA_PROCESS_TITLE));
-                Log.i("ProcessRuns", "Process title of process " + run.getProcessId() + " is " + processTitle);
                 extras.put(EXTRA_PROCESS_TITLE, processTitle);
                 extras.put(EXTRA_TOTAL_STEPS, c.getInt(c.getColumnIndex(EXTRA_TOTAL_STEPS)));
                 extras.put(EXTRA_COMPLETED_STEPS, c.getInt(c.getColumnIndex(EXTRA_COMPLETED_STEPS)));

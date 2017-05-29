@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.Scanner;
 
 import cz.zcu.kiwi.shortprocess.R;
+import cz.zcu.kiwi.shortprocess.model.service.ProcessRunSteps;
 import cz.zcu.kiwi.shortprocess.model.service.ProcessRuns;
 import cz.zcu.kiwi.shortprocess.model.service.ProcessSteps;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
@@ -25,6 +26,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private Processes processes;
     private ProcessSteps processSteps;
     private ProcessRuns processRuns;
+    private ProcessRunSteps processRunSteps;
 
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,9 +39,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         Scanner s = new Scanner(context.getResources().openRawResource(R.raw.short_process_create))
                 .useDelimiter(";");
-        while(s.hasNext()) {
+        while (s.hasNext()) {
             String query = s.next().trim();
-            if(query.length() > 0) {
+            if (query.length() > 0) {
                 Log.i("SQLiteHelper", "Query: " + query);
                 db.execSQL(query);
             }
@@ -66,7 +68,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public Processes getProcesses() {
-        if(this.processes == null) {
+        if (this.processes == null) {
             this.processes = new Processes(this);
             Log.v("SQLiteHelper", "Created Processes helper class");
         }
@@ -75,7 +77,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public ProcessSteps getProcessSteps() {
-        if(this.processSteps == null) {
+        if (this.processSteps == null) {
             this.processSteps = new ProcessSteps(this);
             Log.v("SQLiteHelper", "Created ProcessSteps helper class");
         }
@@ -84,7 +86,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public ProcessRuns getProcessRuns() {
-        if(this.processRuns == null) {
+        if (this.processRuns == null) {
             this.processRuns = new ProcessRuns(this);
             Log.v("SQLiteHelper", "Created ProcessRuns helper class");
         }
@@ -93,5 +95,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
 
+    public ProcessRunSteps getProcessRunSteps() {
+        if (this.processRunSteps == null) {
+            processRunSteps = new ProcessRunSteps(this);
+            Log.v("SQLiteHelper", "Created ProcessRunSteps helper class");
+        }
 
+        return processRunSteps;
+    }
 }

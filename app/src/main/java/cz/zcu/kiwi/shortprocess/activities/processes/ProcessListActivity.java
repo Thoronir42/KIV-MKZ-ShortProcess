@@ -14,12 +14,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.activities.runs.ProcessRunsActivity;
 import cz.zcu.kiwi.shortprocess.model.ModelCursor;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
+import cz.zcu.kiwi.shortprocess.model.entity.ProcessRun;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
 import cz.zcu.kiwi.shortprocess.model.SQLiteHelper;
+import cz.zcu.kiwi.widgetWrappers.EntityClickListener;
 
 public class ProcessListActivity extends AppCompatActivity {
 
@@ -116,6 +120,22 @@ public class ProcessListActivity extends AppCompatActivity {
 
                 Log.v("ProcessListActivity", "Starting editProcessActivity with id " + process.getId());
                 startActivity(intent);
+            }
+        });
+
+        adapter.setOnStart(new EntityClickListener<Process>() {
+            @Override
+            public void onClick(Process entity) {
+                ProcessRun run = new ProcessRun(entity.getId(), new Date(System.currentTimeMillis()));
+                if (sql.getProcessRuns().insert(run) > 0) {
+                    Toast.makeText(context, R.string.process_run_created, Toast.LENGTH_SHORT).show();
+
+                    String message = "Created new run of process " + entity.getId()
+                            + " (" + entity.getTitle() + ")";
+                    Log.i("ProcessListActivity", message);
+                } else {
+                    Toast.makeText(context, R.string.save_error, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

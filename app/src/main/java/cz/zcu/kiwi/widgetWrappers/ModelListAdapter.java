@@ -29,7 +29,7 @@ public class ModelListAdapter<Type extends BaseEntity> extends ArrayAdapter<Type
 
     public void setItems(ModelCursor<Type> items) {
         this.clear();
-        Log.v("ProcessListAdapter", "Displaying " + items.getCount() + " entities");
+        Log.v("ModelListAdapter", "Displaying " + items.getCount() + " entities");
 
         while (items.moveToNext()) {
             this.add(items.formatCurrent());

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 import cz.zcu.kiwi.shortprocess.R;
 import cz.zcu.kiwi.shortprocess.model.entity.Process;
 import cz.zcu.kiwi.shortprocess.model.service.Processes;
+import cz.zcu.kiwi.widgetWrappers.EntityClickListener;
 import cz.zcu.kiwi.widgetWrappers.ModelListAdapter;
 
 
@@ -24,9 +26,15 @@ public class ProcessListAdapter extends ModelListAdapter<Process> {
 
     private final DateFormat dateFormat;
 
+    public EntityClickListener<Process> onStart;
+
     public ProcessListAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
         dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
+    }
+
+    public void setOnStart(EntityClickListener<Process> onStart) {
+        this.onStart = onStart;
     }
 
     @NonNull
@@ -42,8 +50,9 @@ public class ProcessListAdapter extends ModelListAdapter<Process> {
         TextView text_createdOn = (TextView) rowView.findViewById(R.id.createdOn);
         TextView text_stepCount = (TextView) rowView.findViewById(R.id.processSteps);
         ImageView image_icon = (ImageView) rowView.findViewById(R.id.icon);
+        Button buttonStart = (Button) rowView.findViewById(R.id.buttonStart);
 
-        Process p = getItem(position);
+        final Process p = getItem(position);
         ContentValues extras = p.extras();
 
         Date date = p.getDateCreated();
@@ -57,6 +66,13 @@ public class ProcessListAdapter extends ModelListAdapter<Process> {
         text_createdOn.setText(createdOn);
         text_stepCount.setText(stepCount);
         image_icon.setImageResource(R.mipmap.ic_launcher);
+
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStart.onClick(p);
+            }
+        });
 
         return rowView;
     }

@@ -108,11 +108,9 @@ public class ProcessListActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        adapter.setOnClick(new EntityClickListener<Process>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Process process = (Process) parent.getItemAtPosition(position);
-
+            public void onClick(Process process) {
                 Intent intent = new Intent(context, EditProcessActivity.class);
                 intent.setAction(EditProcessActivity.ACTION_EDIT);
 

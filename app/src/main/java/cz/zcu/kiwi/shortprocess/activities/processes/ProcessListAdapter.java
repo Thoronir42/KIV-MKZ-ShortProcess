@@ -67,6 +67,13 @@ public class ProcessListAdapter extends ModelListAdapter<Process> {
         text_stepCount.setText(stepCount);
         image_icon.setImageResource(R.mipmap.ic_launcher);
 
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClick.onClick(p);
+            }
+        });
+
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

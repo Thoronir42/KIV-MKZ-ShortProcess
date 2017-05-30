@@ -44,7 +44,7 @@ public class ProcessRunSteps extends BaseModelHelper<ProcessRunStep> {
                 "   ON ps." + ProcessSteps.PROCESS_ID + " = p." + Processes.ID +
                 " LEFT JOIN " + TABLE + " prs" +
                 "   ON prs." + ProcessRunSteps.PROCESS_RUN_ID + " = pr." + ProcessRuns.ID +
-                "   AND prs." + ProcessRunSteps.PROCESS_STEP_ID + " = ps." + ProcessSteps.ID + 
+                "   AND prs." + ProcessRunSteps.PROCESS_STEP_ID + " = ps." + ProcessSteps.ID +
                 " WHERE pr." + Processes.ID + " = ?" +
                 " ORDER BY ps." + ProcessSteps.INTERVAL_AFTER_START + " ASC";
 
